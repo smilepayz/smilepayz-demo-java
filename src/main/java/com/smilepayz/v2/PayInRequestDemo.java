@@ -86,10 +86,8 @@ public class PayInRequestDemo {
         String minify = SignatureUtils.minify(jsonStr);
         System.out.println("minify = " + minify);
 
-        String referenceId = UUID.randomUUID().toString();
-
         //signature
-        String content = String.join("|", referenceId, timestamp, sandboxMerchantCode,minify);
+        String content = String.join("|",  timestamp, sandboxMerchantCode,minify);
         String signature = SignatureUtils.sha256RsaSignature(content, privateKeyStr);
 
 
@@ -99,7 +97,6 @@ public class PayInRequestDemo {
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("X-TIMESTAMP", timestamp);
         httpPost.addHeader("X-SIGNATURE", signature);
-        httpPost.addHeader("REFERENCE-ID", referenceId);
         httpPost.addHeader("X-PARTNER-ID", sandboxMerchantId);
 
         // set entity

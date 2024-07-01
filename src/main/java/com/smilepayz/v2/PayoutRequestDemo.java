@@ -93,9 +93,8 @@ public class PayoutRequestDemo {
         System.out.println("minify = " + minify);
 
 
-        String referenceId = UUID.randomUUID().toString();
         //signature
-        String content = String.join("|", referenceId, timestamp, prodMerchantCode,minify);
+        String content = String.join("|", timestamp, prodMerchantCode,minify);
         String signature = SignatureUtils.sha256RsaSignature(content, privateKeyStr);
 
 
@@ -105,7 +104,6 @@ public class PayoutRequestDemo {
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("X-TIMESTAMP", timestamp);
         httpPost.addHeader("X-SIGNATURE", signature);
-        httpPost.addHeader("REFERENCE-ID", referenceId);
         httpPost.addHeader("X-PARTNER-ID", prodMerchantId);
 
         // set entity
