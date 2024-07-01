@@ -90,7 +90,7 @@ public class PayInRequestDemo {
 
         //signature
         String content = String.join("|", referenceId, timestamp, sandboxMerchantCode,minify);
-        String signature = SignatureUtils.createSignature(content, privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateKeyStr);
 
 
         // create httpClient

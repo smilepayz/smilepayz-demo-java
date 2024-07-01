@@ -96,7 +96,7 @@ public class PayoutRequestDemo {
         String referenceId = UUID.randomUUID().toString();
         //signature
         String content = String.join("|", referenceId, timestamp, prodMerchantCode,minify);
-        String signature = SignatureUtils.createSignature(content, privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateKeyStr);
 
 
         // create httpClient
