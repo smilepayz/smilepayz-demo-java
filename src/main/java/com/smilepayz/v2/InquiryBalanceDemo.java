@@ -44,8 +44,8 @@ public class InquiryBalanceDemo {
         String prodPath = "https://gateway-test.smilepayz.com" + endPointUlr;
         String sandboxMerchantId = "sandbox-20019";
         String prodMerchantId = "20019";
-        String sandboxMerchantCode = "6a58a603e5043290f4097ee4a7745661b3656932d4eebc3106b5dddc3af6e053";
-        String prodMerchantCode = "95b57c46b8c2e068982be23fb669a80612cad68e6ce6ba4f5af9ec20d23bb274";
+        String merchantSecretSandbox = "6a58a603e5043290f4097ee4a7745661b3656932d4eebc3106b5dddc3af6e053";
+        String merchantSecret = "95b57c46b8c2e068982be23fb669a80612cad68e6ce6ba4f5af9ec20d23bb274";
 
         System.out.println("pay in request url = " + sandboxPath);
 
@@ -69,7 +69,7 @@ public class InquiryBalanceDemo {
         System.out.println("minify = " + minify);
 
         //signature
-        String content = String.join("|",  timestamp, prodMerchantCode,minify);
+        String content = String.join("|",  timestamp, merchantSecret,minify);
         String signature = SignatureUtils.sha256RsaSignature(content, privateKeyStr);
 
 
