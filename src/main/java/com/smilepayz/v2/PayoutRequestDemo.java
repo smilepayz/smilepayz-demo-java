@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 /**
  * @Author Moore
@@ -44,7 +45,7 @@ public class PayoutRequestDemo {
         AreaEnum areaEnum = AreaEnum.INDIA;
 
         //generate parameter
-        String merchantOrderNo = Constant.merchantId + System.currentTimeMillis();
+        String merchantOrderNo = Constant.merchantIdSandBox + UUID.randomUUID().toString();
         String purpose = "Purpose For Disbursement from Java SDK";
         String paymentMethod = "YES"; //India
 
@@ -64,7 +65,7 @@ public class PayoutRequestDemo {
 
         //payoutReq
         TradePayoutReq payoutReq = new TradePayoutReq();
-        payoutReq.setOrderNo(merchantOrderNo);
+        payoutReq.setOrderNo(merchantOrderNo.substring(0,32));
         payoutReq.setPurpose(purpose);
         payoutReq.setProductDetail("Product details");
         payoutReq.setAdditionalParam(additionalReq);

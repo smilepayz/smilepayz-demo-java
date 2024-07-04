@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 /**
  * @Author Moore
@@ -49,7 +50,7 @@ public class PayInRequestDemo {
         AreaEnum areaEnum = AreaEnum.INDONESIA;
 
         //generate parameter
-        String merchantOrderNo = Constant.merchantId + System.currentTimeMillis();
+        String merchantOrderNo = Constant.merchantIdSandBox + UUID.randomUUID().toString();
         String purpose = "Purpose For Transaction from Java SDK";
         String paymentMethod = "W_DANA";
 
@@ -62,7 +63,7 @@ public class PayInRequestDemo {
         merchantReq.setMerchantId(Constant.merchantIdSandBox);
 
         TradePayinReq payinReq = new TradePayinReq();
-        payinReq.setOrderNo(merchantOrderNo);
+        payinReq.setOrderNo(merchantOrderNo.substring(0,32));
         payinReq.setPurpose(purpose);
         payinReq.setMoney(moneyReq);
         payinReq.setMerchant(merchantReq);
