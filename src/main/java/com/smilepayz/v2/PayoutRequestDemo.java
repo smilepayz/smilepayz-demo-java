@@ -67,11 +67,11 @@ public class PayoutRequestDemo {
         TradePayoutReq payoutReq = new TradePayoutReq();
         payoutReq.setOrderNo(merchantOrderNo.substring(0,32));
         payoutReq.setPurpose(purpose);
-        payoutReq.setProductDetail("Product details");
+//        payoutReq.setProductDetail("Product details");
         payoutReq.setAdditionalParam(additionalReq);
         payoutReq.setMoney(moneyReq);
         payoutReq.setMerchant(merchantReq);
-        payoutReq.setCallbackUrl("https:your.dome.com/your.notify.path");
+//        payoutReq.setCallbackUrl("https:your.dome.com/your.notify.path");
         payoutReq.setPaymentMethod(paymentMethod);
         payoutReq.setCashAccount("17385238451");
         payoutReq.setArea(areaEnum.getCode());

@@ -46,9 +46,9 @@ public class InquriyOrderStatusDemo {
         System.out.println("timestamp = " + timestamp);
 
         InquiryOrderStatsuReq inquiryOrderStatsuReq = new InquiryOrderStatsuReq();
-        inquiryOrderStatsuReq.setOrderNo("112200182402261848252600");
-        inquiryOrderStatsuReq.setTradeNo("D_1708948105016");
-        inquiryOrderStatsuReq.setTradeType(2);
+        inquiryOrderStatsuReq.setOrderNo("T_1709020509598");
+//        inquiryOrderStatsuReq.setTradeNo("111200162402261726275288");
+        inquiryOrderStatsuReq.setTradeType(1);
 
         //jsonStr by gson
         Gson gson = new Gson();
