@@ -52,7 +52,6 @@ public class InquiryBalanceDemo {
         System.out.println("timestamp = " + timestamp);
 
         InquiryBalanceReq inquiryBalanceReq = new InquiryBalanceReq();
-        inquiryBalanceReq.setPartnerReferenceNo(UUID.randomUUID().toString());
         inquiryBalanceReq.setAccountNo("21220030202403071031");
         inquiryBalanceReq.setBalanceTypes(Arrays.asList("BALANCE"));
 

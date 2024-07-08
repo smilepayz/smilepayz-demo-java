@@ -8,17 +8,9 @@ import java.util.List;
  **/
 public class InquiryBalanceReq {
 
-    private String partnerReferenceNo;
     private String accountNo;
     private List<String> balanceTypes;
 
-    public String getPartnerReferenceNo() {
-        return partnerReferenceNo;
-    }
-
-    public void setPartnerReferenceNo(String partnerReferenceNo) {
-        this.partnerReferenceNo = partnerReferenceNo;
-    }
 
     public String getAccountNo() {
         return accountNo;
