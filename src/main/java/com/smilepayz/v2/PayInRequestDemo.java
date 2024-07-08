@@ -32,14 +32,22 @@ public class PayInRequestDemo {
     @SneakyThrows
     public static void main(String[] args) {
         System.out.println("=====>Payin transaction");
-
-        //url
         String endPointUlr = "/v2.0/transaction/pay-in";
-        String sandboxPath = Constant.baseUrlSanbox + endPointUlr;
-        String prodPath = Constant.baseUrl + endPointUlr;
 
 
-        System.out.println("pay in request url = " + sandboxPath);
+        //sandbox
+        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String merchantId = Constant.merchantIdSandBox;
+        String merchantSecret = Constant.merchantSecretSandBox;
+
+        //production
+//        String requestPath = Constant.baseUrl + endPointUlr;
+//        String merchantId = Constant.merchantId;
+//        String merchantSecret = Constant.merchantSecret;
+
+
+
+        System.out.println("pay in request url = " + requestPath);
 
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
@@ -47,12 +55,12 @@ public class PayInRequestDemo {
         System.out.println("timestamp = " + timestamp);
         BigDecimal amount = new BigDecimal("10000");
 
-        AreaEnum areaEnum = AreaEnum.INDONESIA;
+        AreaEnum areaEnum = AreaEnum.INDIA;
 
         //generate parameter
-        String merchantOrderNo = Constant.merchantIdSandBox + UUID.randomUUID().toString();
+        String merchantOrderNo = merchantId.replace("sandbox-","S") + UUID.randomUUID().toString();
         String purpose = "Purpose For Transaction from Java SDK";
-        String paymentMethod = "W_DANA";
+        String paymentMethod = "P2P";
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
@@ -60,7 +68,7 @@ public class PayInRequestDemo {
         moneyReq.setAmount(amount);
         //merchantReq
         MerchantReq merchantReq = new MerchantReq();
-        merchantReq.setMerchantId(Constant.merchantIdSandBox);
+        merchantReq.setMerchantId(merchantId);
 
         TradePayinReq payinReq = new TradePayinReq();
         payinReq.setOrderNo(merchantOrderNo.substring(0,32));
@@ -82,17 +90,17 @@ public class PayInRequestDemo {
         System.out.println("minify = " + minify);
 
         //signature
-        String content = String.join("|", timestamp, Constant.merchantSecretSandBox, minify);
+        String content = String.join("|", timestamp, merchantSecret, minify);
         String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
 
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(sandboxPath);
+        HttpPost httpPost = new HttpPost(requestPath);
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("X-TIMESTAMP", timestamp);
         httpPost.addHeader("X-SIGNATURE", signature);
-        httpPost.addHeader("X-PARTNER-ID", Constant.merchantIdSandBox);
+        httpPost.addHeader("X-PARTNER-ID", merchantId);
 
         // set entity
         httpPost.setEntity(new StringEntity(jsonStr, StandardCharsets.UTF_8));
@@ -108,7 +116,7 @@ public class PayInRequestDemo {
         // release
         EntityUtils.consume(httpEntity);
 
-        System.out.println("The pay interface is completed, and you can get your payment link");
+        System.out.println("======> request end ,request success");
 
 
     }

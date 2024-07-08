@@ -2,10 +2,6 @@ package com.smilepayz.v2;
 
 import com.google.gson.Gson;
 import com.smilepayz.v2.bean.InquiryBalanceReq;
-import com.smilepayz.v2.bean.MerchantReq;
-import com.smilepayz.v2.bean.MoneyReq;
-import com.smilepayz.v2.bean.TradePayinReq;
-import com.smilepayz.v2.data.AreaEnum;
 import com.smilepayz.v2.data.Constant;
 import lombok.SneakyThrows;
 import org.apache.http.HttpEntity;
@@ -16,7 +12,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,18 +27,24 @@ import java.util.UUID;
 public class InquiryBalanceDemo {
 
 
-
     @SneakyThrows
     public static void main(String[] args) {
-        System.out.println("=====>Payin transaction");
+        System.out.println("=====>InquiryBalanceDemo");
 
         //url
         String endPointUlr = "/v2.0/inquiry-balance";
-        String sandboxPath = Constant.baseUrlSanbox + endPointUlr;
-        String prodPath =  Constant.baseUrl + endPointUlr;
 
+        //sandbox
+//        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+//        String merchantId = Constant.merchantIdSandBox;
+//        String merchantSecret = Constant.merchantSecretSandBox;
 
-        System.out.println("pay in request url = " + prodPath);
+        //production
+        String requestPath = Constant.baseUrl + endPointUlr;
+        String merchantId = Constant.merchantId;
+        String merchantSecret = Constant.merchantSecret;
+
+        System.out.println("InquiryBalanceDemo request url = " + requestPath);
 
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
@@ -53,7 +54,7 @@ public class InquiryBalanceDemo {
         InquiryBalanceReq inquiryBalanceReq = new InquiryBalanceReq();
         inquiryBalanceReq.setPartnerReferenceNo(UUID.randomUUID().toString());
         inquiryBalanceReq.setAccountNo("21220030202403071031");
-        inquiryBalanceReq.setBalanceTypes(Arrays.asList("balance"));
+        inquiryBalanceReq.setBalanceTypes(Arrays.asList("BALANCE"));
 
         //jsonStr by gson
         Gson gson = new Gson();
@@ -65,17 +66,17 @@ public class InquiryBalanceDemo {
         System.out.println("minify = " + minify);
 
         //signature
-        String content = String.join("|",  timestamp, Constant.merchantSecret,minify);
+        String content = String.join("|", timestamp, merchantSecret, minify);
         String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
 
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(prodPath);
+        HttpPost httpPost = new HttpPost(requestPath);
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("X-TIMESTAMP", timestamp);
         httpPost.addHeader("X-SIGNATURE", signature);
-        httpPost.addHeader("X-PARTNER-ID", Constant.merchantId);
+        httpPost.addHeader("X-PARTNER-ID", merchantId);
 
         // set entity
         httpPost.setEntity(new StringEntity(jsonStr, StandardCharsets.UTF_8));
@@ -91,8 +92,7 @@ public class InquiryBalanceDemo {
         // release
         EntityUtils.consume(httpEntity);
 
-        System.out.println("The pay interface is completed, and you can get your payment link");
-
+        System.out.println("======> request end ,request success");
 
 
     }

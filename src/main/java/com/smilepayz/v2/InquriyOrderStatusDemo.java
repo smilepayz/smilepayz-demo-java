@@ -1,7 +1,6 @@
 package com.smilepayz.v2;
 
 import com.google.gson.Gson;
-import com.smilepayz.v2.bean.InquiryBalanceReq;
 import com.smilepayz.v2.bean.InquiryOrderStatsuReq;
 import com.smilepayz.v2.data.Constant;
 import lombok.SneakyThrows;
@@ -18,8 +17,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * @Author Moore
@@ -33,12 +30,18 @@ public class InquriyOrderStatusDemo {
 
         //url
         String endPointUlr = "/v2.0/inquiry-status";
-        String sandboxPath = Constant.baseUrlSanbox + endPointUlr;
-        String prodPath = Constant.baseUrl  + endPointUlr;
+        //sandbox
+        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String merchantId = Constant.merchantIdSandBox;
+        String merchantSecret = Constant.merchantSecretSandBox;
+
+        //production
+//        String requestPath = Constant.baseUrl + endPointUlr;
+//        String merchantId = Constant.merchantId;
+//        String merchantSecret = Constant.merchantSecret;
 
 
-
-        System.out.println("pay in request url = " + prodPath);
+        System.out.println("request url = " + requestPath);
 
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
@@ -60,17 +63,17 @@ public class InquriyOrderStatusDemo {
         System.out.println("minify = " + minify);
 
         //signature
-        String content = String.join("|",  timestamp, Constant.merchantSecret,minify);
+        String content = String.join("|", timestamp, merchantSecret, minify);
         String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
 
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(prodPath);
+        HttpPost httpPost = new HttpPost(requestPath);
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("X-TIMESTAMP", timestamp);
         httpPost.addHeader("X-SIGNATURE", signature);
-        httpPost.addHeader("X-PARTNER-ID", Constant.merchantId);
+        httpPost.addHeader("X-PARTNER-ID", merchantId);
 
         // set entity
         httpPost.setEntity(new StringEntity(jsonStr, StandardCharsets.UTF_8));
@@ -86,8 +89,7 @@ public class InquriyOrderStatusDemo {
         // release
         EntityUtils.consume(httpEntity);
 
-        System.out.println("The pay interface is completed, and you can get your payment link");
-
+        System.out.println("======> request end ,request success");
 
 
     }

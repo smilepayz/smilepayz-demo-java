@@ -33,8 +33,16 @@ public class PayoutRequestDemo {
     public static void main(String[] args) {
         //url
         String endPointUlr = "/v2.0/disbursement/pay-out";
-        String sandboxPath = Constant.baseUrlSanbox + endPointUlr;
-        String prodPath = Constant.baseUrl + endPointUlr;
+
+        //sandbox
+        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String merchantId = Constant.merchantIdSandBox;
+        String merchantSecret = Constant.merchantSecretSandBox;
+
+        //production
+//        String requestPath = Constant.baseUrl + endPointUlr;
+//        String merchantId = Constant.merchantId;
+//        String merchantSecret = Constant.merchantSecret;
 
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
@@ -45,7 +53,7 @@ public class PayoutRequestDemo {
         AreaEnum areaEnum = AreaEnum.INDIA;
 
         //generate parameter
-        String merchantOrderNo = Constant.merchantIdSandBox + UUID.randomUUID().toString();
+        String merchantOrderNo = merchantId.replace("sandbox-","S") + UUID.randomUUID().toString();
         String purpose = "Purpose For Disbursement from Java SDK";
         String paymentMethod = "YES"; //India
 
@@ -56,7 +64,7 @@ public class PayoutRequestDemo {
 
         //merchantReq
         MerchantReq merchantReq = new MerchantReq();
-        merchantReq.setMerchantId(Constant.merchantId);
+        merchantReq.setMerchantId(merchantId);
 
 
         //TradeAdditionalReq
@@ -87,21 +95,21 @@ public class PayoutRequestDemo {
 
 
         //signature
-        String content = String.join("|", timestamp, Constant.merchantSecret, minify);
+        String content = String.join("|", timestamp, merchantSecret, minify);
         String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
 
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(prodPath);
+        HttpPost httpPost = new HttpPost(requestPath);
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.addHeader("X-TIMESTAMP", timestamp);
         httpPost.addHeader("X-SIGNATURE", signature);
-        httpPost.addHeader("X-PARTNER-ID", Constant.merchantId);
+        httpPost.addHeader("X-PARTNER-ID", merchantId);
 
         // set entity
         httpPost.setEntity(new StringEntity(jsonStr, StandardCharsets.UTF_8));
-        System.out.println(prodPath);
+        System.out.println(requestPath);
         // send
         HttpResponse response = httpClient.execute(httpPost);
 
@@ -112,5 +120,8 @@ public class PayoutRequestDemo {
 
         // release
         EntityUtils.consume(httpEntity);
+
+        System.out.println("======> request end ,request success");
+
     }
 }
