@@ -6,9 +6,46 @@ package com.smilepayz.v2.data;
  **/
 public class Constant {
 
-    public static final String privateKeyStr = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDBGz59n0SjH/81f2uDwoW7fueaGhzapILYqAKvnRxXGS0ndLaBhFrKpl9MuoATW91VvAvR6ML6ZoUOE4+XCVPmjmWuk5B2hw9XDwkP+oBhwF8d6BBRjLRmIK/dc4GVoUE4YoDfERfmr9sIDHMSMiZrAkj8Vf81aoo37ciEjE8JqW5sYkPZTJLCY69D4t1IewHJqhpKDozj6jReVUb69Q6F0Vg+b2xSVGI1USYsaonN+0k4JrEaRfEkSmkQcSVOLdVczPMcNvPq/WRxYBbegRO+tJT+2cbfjf3CnlqugKYCdAoqJZq9VuuePiqJtM5rCkFAa6WlLAnginGpG+a873G7AgMBAAECggEACd+xv0ygftLJAtxEDBWrLt4bS4bgSNG2mwtkL8SRyWZRJ75RAqhY2BnPr6WtnM/KrnKSDCahqZoKXaDka62fa5+GVXnYHidjwmjTZszBOb5TXr0Z8IGIS9yKAYHBc3wuUIrA2icOmM4PHgc87wY/bqNMRhLDnOCYtqli4lwmQnEfdV5SOBHANQxpg1zxT2exuUPMQDbUcWEKgK9DnKlQa0ytDlDSHWuH919jsR4sIh4muJIrxkEBxXopxYOzkElSMFuaAdDbkEVgBn2El7Mw4FEPQUMDVRQ/DRHxiS36X/y69yR3MvU5RmCyQZSRHx8wKE/4wPoC4GmdLBb1BEwHuQKBgQD9KpZ8jmBIoTFpM02djENOemK4/fN910rU+csMhrRj7RoNTO9BC3nd/7lOk3o9avz0LCeh2p7P/Xdm6hUN4+goi/YwXao91Phf+7CwbRIXNceCzFt4aBzUCZ0NesEmq0dnhsLmxAUTbB98nNVa7EiRM7r/bRLstcCYwhPXruUlLQKBgQDDRJAlOpOmbifDwHxyDZP501N8zHF847bVv+0jKMemgC+Wf65ufG7/v2H6jDDo0lsWk66qX+iFkwE1W/P1fyMIIej9xA94gHFSstYMvRTL1RjNQ6lsora/vQ3v1oG6UfiwtGOEbH3BAIqnVYw0CNr0AMM1T6VPZxpmQYy/vMCThwKBgB0TkhsWIxrUYJ9rhAOPQ3+08Le8ewW9/1s8oUR8CCXd6nsSlfwLfGCx6S+MIqMBMbI9jAO73zeWLeuFAQwKW/SkNo9Rgqb9WdV0S9PHgydlRtfP7sWCd6UmwYH10k9FprrOMH5ejxKu/WLLhHmf36nFnjmN5nmHWmpxB+RisvC1AoGBAIrXioLeJrQ1KRMYH6RdITWG3JslJyC9LXjI0g2o5mTuSmgBe37V/XrdkwY6fmBdiiUAdzZvoX6wqzBMpKePcdJLgkZGDRYKhgleXbKLE2lnqQ3yqVo0TCsDexBo/q8DsAe9C/HRzozYHL6kpl8tWLocfLDAY/OUhQHmY/TFekyrAoGAKYqoumFk67jgg3MG/2/Sx10Y11Gij3CqlggXuF+OzRL1cKH3WePiDlG1GnAtc9xEciAUxte8i6bJ294SOJloThJvwujEAoch0DtesL1ojfOJx/dB+7Nmvp27/JV7hvDTGM934Vz3Lj4WOD7XgMi1R1IZQMKYxhEuthi5G/IGi3U=";
-    public static final String publicKeyStr = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwRs+fZ9Eox//NX9rg8KFu37nmhoc2qSC2KgCr50cVxktJ3S2gYRayqZfTLqAE1vdVbwL0ejC+maFDhOPlwlT5o5lrpOQdocPVw8JD/qAYcBfHegQUYy0ZiCv3XOBlaFBOGKA3xEX5q/bCAxzEjImawJI/FX/NWqKN+3IhIxPCalubGJD2UySwmOvQ+LdSHsByaoaSg6M4+o0XlVG+vUOhdFYPm9sUlRiNVEmLGqJzftJOCaxGkXxJEppEHElTi3VXMzzHDbz6v1kcWAW3oETvrSU/tnG3439wp5aroCmAnQKKiWavVbrnj4qibTOawpBQGulpSwJ4IpxqRvmvO9xuwIDAQAB";
+    /**
+    *MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCkpA+yaHl3hjfn
+    *vAgWuoxPoAGbOAiVpkogZ1koQJ8r8hdEAkHmzE0uYbewBdRpJaXi3tUljSax7IkW
+    *JWm5k5T+uqMUdN2MRDRG9TykpfPVNnVCTKlEuFhXySE1O2b9ljjjnkijkjH+oWxd
+    *u19BJb7CKy38uCWeQYohT36Xk9gn7y7WwGT88vfTgZu7dYM84uadBCPS0maOQjea
+    *RG3Yu/Yejf8Txu1zb4n9OW1+OKYLs/gdByUnc41+cHbYWALLs227Qx1RpJMT9BHx
+    *1im1IdLIiLXK9K9PTppPXgk+DBauIsAbTW5aP+v6fcfhLeECVG/Ul3bKVVo/SQKq
+    *OoSp0Md7AgMBAAECggEABRCG6xYLpoGadqZyGUDj0A87/Wpb2T6kSRrkwzg5rUBl
+    *NtJa9J6UQTkATYngXtupnrD8HYuaBR8hmGzOM8c2bh+PpLFznzz53rTsiKQSPBzQ
+    *vpldG6AQF6M4QkrxgBt+5IGZ+m4k25BbpQZ+h6KBm7d4Uq3XembJuPyZCFCj9ZZ5
+    *MRYDCvypsakIurROglLQK6xTNbIAhWHlTki1aOn34BjvbNNtmPrScP4fWou/Wh1b
+    *e5dVK0pxM+G26aLpqGSCrsNylcBK6O2Ud+FdFR3gnNk42s5K3J4RfC8SaXmQIsNb
+    *0SMBV0Z74rpVeebGSt2+pjDJvqXdmPew9daXT9wAAQKBgQDwJexHN9CYLSYyaVbt
+    *ds8nxDG4DGXBWHgyB/KIVyMnxHcoz6pmoSY8QhcZENAfyQ3qaBw2sq0+k2ywQZ1Z
+    *4cLXEZpS+klFtRbfV0SCFP3AmqgxNaMQfE8BAj6VkIa0L+YK2IUq/7pUEzBgs2XJ
+    *TdQA2PSJ57ol/tjz8TNn7+0zewKBgQCvgjMVhCff3N4n1IcQ3kpJMqntjN+qXh3/
+    *dBiJ3yLdU+QanSVcnGRMOxAABmlMoIbd1xmQqaY+4HxPTl7QHPdPIskgicjuvUct
+    *2NACOzGQ0TMYY6Y76j7S64c/zIIh8ZpZQu6NOQUxJX8nqCmXfynkUxKt+QFEp2Kb
+    *OhnCgpx8AQKBgBUfALzyx8HalrVwVljkTivtMYJCdOCga1HbKRWctFbXDLPmL9J+
+    *8eHy3h0yQVvKTxMCvRiCdoI+bRzDaJdzJ7PKtIv/v1oGJ1DVWA0o03iRIaHSWdkl
+    *Vb18+QwmffJzFAR4Lp4th7HFTkfy/0zJL5AzhK5sVw7obyRlXmQR0gbpAoGAEFHd
+    *Ci0lwA07oxyCCrGA2tmZL3uf+KmTxIM5HOjgxw/b8BWYucnZEbWUQUxXUkbDA7HS
+    *sL71tHcPWBiDfHqVDIjBhwMI6hozmjHE9dAnRb4OMEBj3sJjYR2BkA8mMp3SqmYs
+    *5Hje4LkJ39glNe8fKBoJbJ/w3D9sTd7TMmEOyAECgYAp27u3Txf65wVBV6NY/RdR
+    */vq16/mZlXZ2kH459KX1Zh7hKStmTF7RL1kNQccpmn54PZtfJ1bZlwXzrHT+rvO9
+    *VGnw61ScSmQBfJ9XFB2j0vbm4yRcWnw0I/ycFuEhcGdakUejlxeaeWCxmY6qsY+0
+    *YGC66+5jRKR+T3Vjzi6w2A==
+    **/
+    public static final String privateKeyStr = "";
 
+      /**
+       *   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApKQPsmh5d4Y357wIFrqM
+       *   T6ABmzgIlaZKIGdZKECfK/IXRAJB5sxNLmG3sAXUaSWl4t7VJY0mseyJFiVpuZOU
+       *   /rqjFHTdjEQ0RvU8pKXz1TZ1QkypRLhYV8khNTtm/ZY4455Io5Ix/qFsXbtfQSW+
+       *   wist/LglnkGKIU9+l5PYJ+8u1sBk/PL304Gbu3WDPOLmnQQj0tJmjkI3mkRt2Lv2
+       *   Ho3/E8btc2+J/TltfjimC7P4HQclJ3ONfnB22FgCy7Ntu0MdUaSTE/QR8dYptSHS
+       *   yIi1yvSvT06aT14JPgwWriLAG01uWj/r+n3H4S3hAlRv1Jd2ylVaP0kCqjqEqdDH
+       *   ewIDAQAB
+      **/
+     public static final String publicKeyStr = "";
 
     public static final String baseUrlSanbox = "https://sandbox-gateway.smilepayz.com";
     public static final String baseUrl = "https://gateway.smilepayz.com";
