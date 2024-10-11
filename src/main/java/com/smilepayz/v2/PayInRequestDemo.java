@@ -47,7 +47,6 @@ public class PayInRequestDemo {
 //        String merchantSecret = Constant.merchantSecret;
 
 
-
         System.out.println("pay in request url = " + requestPath);
 
 
@@ -55,28 +54,31 @@ public class PayInRequestDemo {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
         BigDecimal amount = new BigDecimal("10000");
-        //demo for INDONESIA ,replace AreaEnum paymentMethod to you what need
+        //demo for INDONESIA ,replace areaEnum , paymentMethod to you what need
         AreaEnum areaEnum = AreaEnum.INDONESIA;
         String paymentMethod = "W_DANA";
 
 
         //generate parameter
-        String merchantOrderNo = merchantId.replace("sandbox-","S") + UUID.randomUUID().toString();
+        String merchantOrderNo = merchantId.replace("sandbox-", "S") + UUID.randomUUID().toString();
         String purpose = "Purpose For Transaction from Java SDK";
 
+        // additional parameter
         TradeAdditionalReq additionalReq = new TradeAdditionalReq();
         //required for THB transaction
         additionalReq.setPayerAccountNo("your payer bank account no");
+
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
         moneyReq.setCurrency(areaEnum.getCurrency().name());
         moneyReq.setAmount(amount);
+
         //merchantReq
         MerchantReq merchantReq = new MerchantReq();
         merchantReq.setMerchantId(merchantId);
 
         TradePayinReq payinReq = new TradePayinReq();
-        payinReq.setOrderNo(merchantOrderNo.substring(0,32));
+        payinReq.setOrderNo(merchantOrderNo.substring(0, 32));
         payinReq.setPurpose(purpose);
         payinReq.setMoney(moneyReq);
         payinReq.setMerchant(merchantReq);
