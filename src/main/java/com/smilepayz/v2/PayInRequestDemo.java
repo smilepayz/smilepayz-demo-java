@@ -3,6 +3,7 @@ package com.smilepayz.v2;
 import com.google.gson.Gson;
 import com.smilepayz.v2.bean.MerchantReq;
 import com.smilepayz.v2.bean.MoneyReq;
+import com.smilepayz.v2.bean.TradeAdditionalReq;
 import com.smilepayz.v2.bean.TradePayinReq;
 import com.smilepayz.v2.data.AreaEnum;
 import com.smilepayz.v2.data.Constant;
@@ -54,14 +55,18 @@ public class PayInRequestDemo {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
         BigDecimal amount = new BigDecimal("10000");
+        //demo for INDONESIA ,replace AreaEnum paymentMethod to you what need
+        AreaEnum areaEnum = AreaEnum.INDONESIA;
+        String paymentMethod = "W_DANA";
 
-        AreaEnum areaEnum = AreaEnum.INDIA;
 
         //generate parameter
         String merchantOrderNo = merchantId.replace("sandbox-","S") + UUID.randomUUID().toString();
         String purpose = "Purpose For Transaction from Java SDK";
-        String paymentMethod = "P2P";
 
+        TradeAdditionalReq additionalReq = new TradeAdditionalReq();
+        //required for THB transaction
+        additionalReq.setPayerAccountNo("your payer bank account no");
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
         moneyReq.setCurrency(areaEnum.getCurrency().name());
@@ -76,10 +81,10 @@ public class PayInRequestDemo {
         payinReq.setMoney(moneyReq);
         payinReq.setMerchant(merchantReq);
         //replace this value
-        payinReq.setCallbackUrl("https:your.dome.com/your.notify.path");
+        payinReq.setCallbackUrl("https:your.domain.com/your.notify.path");
         payinReq.setPaymentMethod(paymentMethod);
         payinReq.setArea(areaEnum.getCode());
-
+        payinReq.setAdditionalParam(additionalReq);
         //jsonStr by gson
         Gson gson = new Gson();
         String jsonStr = gson.toJson(payinReq);

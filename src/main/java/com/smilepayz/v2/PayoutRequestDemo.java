@@ -48,14 +48,15 @@ public class PayoutRequestDemo {
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        BigDecimal amount = new BigDecimal("200");
+        BigDecimal amount = new BigDecimal("200000");
 
-        AreaEnum areaEnum = AreaEnum.INDIA;
+        //demo for INDONESIA ,replace AreaEnum paymentMethod to you what need
+        AreaEnum areaEnum = AreaEnum.INDONESIA;
+        String paymentMethod = "BCA"; //INDONESIA
 
         //generate parameter
         String merchantOrderNo = merchantId.replace("sandbox-","S") + UUID.randomUUID().toString();
         String purpose = "Purpose For Disbursement from Java SDK";
-        String paymentMethod = "YES"; //India
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
@@ -69,7 +70,10 @@ public class PayoutRequestDemo {
 
         //TradeAdditionalReq
         TradeAdditionalReq additionalReq = new TradeAdditionalReq();
-        additionalReq.setIfscCode("YESB0000097"); //India
+        //required for INR transaction
+        additionalReq.setIfscCode("the ifsc code of bank");
+        //required for BRL transaction
+        additionalReq.setTaxNumber("the tax number ");
 
         //payoutReq
         TradePayoutReq payoutReq = new TradePayoutReq();
@@ -81,7 +85,7 @@ public class PayoutRequestDemo {
         payoutReq.setMerchant(merchantReq);
 //        payoutReq.setCallbackUrl("https:your.dome.com/your.notify.path");
         payoutReq.setPaymentMethod(paymentMethod);
-        payoutReq.setCashAccount("17385238451");
+        payoutReq.setCashAccount("the cash account like:bank account number,e-wallet account number");
         payoutReq.setArea(areaEnum.getCode());
 
         //jsonStr by gson
