@@ -9,7 +9,6 @@ public class Constant {
     public static final String privateKeyStr = "Merchant Private Key";
     public static final String publicKeyStr = "Platform Public Key";
 
-
     public static final String baseUrlSanbox = "https://sandbox-gateway.smilepayz.com";
     public static final String baseUrl = "https://gateway.smilepayz.com";
     public static final String merchantId = "your merchant id";
