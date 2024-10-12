@@ -83,7 +83,7 @@ public class PayInRequestDemo {
         payinReq.setMoney(moneyReq);
         payinReq.setMerchant(merchantReq);
         //replace this value
-        payinReq.setCallbackUrl("https:your.domain.com/your.notify.path");
+        payinReq.setCallbackUrl("your.notify.url");
         payinReq.setPaymentMethod(paymentMethod);
         payinReq.setArea(areaEnum.getCode());
         payinReq.setAdditionalParam(additionalReq);

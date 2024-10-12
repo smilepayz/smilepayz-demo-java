@@ -83,7 +83,7 @@ public class PayoutRequestDemo {
         payoutReq.setAdditionalParam(additionalReq);
         payoutReq.setMoney(moneyReq);
         payoutReq.setMerchant(merchantReq);
-//        payoutReq.setCallbackUrl("https:your.dome.com/your.notify.path");
+        payoutReq.setCallbackUrl("your.notify.url");
         payoutReq.setPaymentMethod(paymentMethod);
         payoutReq.setCashAccount("the cash account like:bank account number,e-wallet account number");
         payoutReq.setArea(areaEnum.getCode());

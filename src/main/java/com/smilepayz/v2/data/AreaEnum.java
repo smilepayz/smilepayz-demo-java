@@ -6,7 +6,8 @@ public enum AreaEnum {
     INDONESIA(10, CurrencyEnum.IDR, 62),
     THAILAND(11, CurrencyEnum.THB, 66),
     INDIA(12, CurrencyEnum.INR, 91),
-    BRAZIL(13, CurrencyEnum.BRL, 55);
+    BRAZIL(13, CurrencyEnum.BRL, 55),
+    MEXICO(14, CurrencyEnum.MXN, 52);
 
     private final Integer code;
     private final CurrencyEnum currency;

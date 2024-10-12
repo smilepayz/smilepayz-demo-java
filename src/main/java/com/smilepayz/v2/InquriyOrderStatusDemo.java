@@ -49,8 +49,9 @@ public class InquriyOrderStatusDemo {
         System.out.println("timestamp = " + timestamp);
 
         InquiryOrderStatsuReq inquiryOrderStatsuReq = new InquiryOrderStatsuReq();
-        inquiryOrderStatsuReq.setOrderNo("T_1709020509598");
-//        inquiryOrderStatsuReq.setTradeNo("111200162402261726275288");
+        inquiryOrderStatsuReq.setOrderNo("merchant order no");
+        inquiryOrderStatsuReq.setTradeNo("platform trade no");
+        // 1 for pay-in order, 2 for pay-out order
         inquiryOrderStatsuReq.setTradeType(1);
 
         //jsonStr by gson
