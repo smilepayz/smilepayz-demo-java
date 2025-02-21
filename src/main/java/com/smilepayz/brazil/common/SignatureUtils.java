@@ -1,9 +1,9 @@
 package com.smilepayz.brazil.common;
 
 import com.google.gson.Gson;
-import com.smilepayz.brazil.data.AreaEnum;
-import com.smilepayz.brazil.data.Constant;
-import com.smilepayz.brazil.data.CurrencyEnum;
+import com.smilepayz.brazil.bean.MerchantReq;
+import com.smilepayz.brazil.bean.MoneyReq;
+import com.smilepayz.brazil.bean.TradePayinReq;
 import org.apache.commons.codec.binary.Base64;
 
 import java.math.BigDecimal;
