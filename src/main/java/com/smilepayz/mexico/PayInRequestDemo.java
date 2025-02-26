@@ -9,6 +9,7 @@ import com.smilepayz.mexico.common.AreaEnum;
 import com.smilepayz.mexico.common.Constant;
 import com.smilepayz.mexico.common.SignatureUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,42 +34,46 @@ public class PayInRequestDemo {
 
     @SneakyThrows
     public static void main(String[] args) {
+        String env = "";
+        String merchantId = "";
+        String merchantSecret = "";
+        String privateKeyString = "SPEI";
+        String paymentMethod = "";
+        BigDecimal amount = BigDecimal.valueOf(100);
+        doTransaction(env, merchantId, merchantSecret, privateKeyString,paymentMethod,amount);
+
+    }
+
+    public static void doTransaction(String env,
+                                     String merchantId,
+                                     String merchantSecret,
+                                     String privateKeyString,
+                                     String paymentMethod,
+                                     BigDecimal amount) throws Exception {
+
         System.out.println("=====>Payin transaction");
         String endPointUlr = "/v2.0/transaction/pay-in";
 
-
-        //sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
-        String merchantId = Constant.merchantIdSandBox;
-        String merchantSecret = Constant.merchantSecretSandBox;
-
+        //default sandbox
+        String requestPath =  Constant.baseUrlSanbox + endPointUlr;
         //production
-//        String requestPath = Constant.baseUrl + endPointUlr;
-//        String merchantId = Constant.merchantId;
-//        String merchantSecret = Constant.merchantSecret;
-
+        if (StringUtils.equals(env, "production")) {
+            requestPath =  Constant.baseUrl + endPointUlr;
+        }
 
         System.out.println("pay in request url = " + requestPath);
-
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        BigDecimal amount = new BigDecimal("100");
-        //demo for INDONESIA ,replace areaEnum , paymentMethod to you what need
-        AreaEnum areaEnum = AreaEnum.MEXICO;
-        String paymentMethod = "SPEI";
 
+        AreaEnum areaEnum = AreaEnum.MEXICO;
 
         //generate parameter
         String merchantOrderNo = (merchantId + UUID.randomUUID()).replaceAll("-", "")
                 .substring(0, 32);
         String purpose = "Purpose For Transaction from Java SDK";
 
-        // additional parameter
-        TradeAdditionalReq additionalReq = new TradeAdditionalReq();
-        //required for THB transaction
-        additionalReq.setPayerAccountNo("your payer bank account no");
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
@@ -87,7 +92,6 @@ public class PayInRequestDemo {
         payinReq.setCallbackUrl("your.notify.url"); //replace this value
         payinReq.setPaymentMethod(paymentMethod);
         payinReq.setArea(areaEnum.getCode());
-        payinReq.setAdditionalParam(additionalReq);
 
         //jsonStr by gson
         Gson gson = new Gson();
@@ -100,7 +104,7 @@ public class PayInRequestDemo {
 
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateKeyString);
 
 
         // create httpClient

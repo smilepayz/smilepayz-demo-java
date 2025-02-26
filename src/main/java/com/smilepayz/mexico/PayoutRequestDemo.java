@@ -3,12 +3,12 @@ package com.smilepayz.mexico;
 import com.google.gson.Gson;
 import com.smilepayz.mexico.bean.MerchantReq;
 import com.smilepayz.mexico.bean.MoneyReq;
-import com.smilepayz.mexico.bean.TradeAdditionalReq;
 import com.smilepayz.mexico.bean.TradePayoutReq;
 import com.smilepayz.mexico.common.AreaEnum;
 import com.smilepayz.mexico.common.Constant;
 import com.smilepayz.mexico.common.SignatureUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -32,32 +32,50 @@ import java.util.UUID;
 public class PayoutRequestDemo {
     @SneakyThrows
     public static void main(String[] args) {
+        String env = "";
+        String merchantId = "";
+        String merchantSecret = "";
+        String privateStr = "";
+        String paymentMethod = "BANXICO";
+        String cashAccount = "";
+        BigDecimal amount = BigDecimal.valueOf(10000);
+
+        doDisbursement(env,
+                merchantId,
+                merchantSecret,
+                privateStr,
+                paymentMethod,
+                cashAccount,
+                amount);
+
+    }
+
+    public static void doDisbursement(String env,
+                                      String merchantId,
+                                      String merchantSecret,
+                                      String privateStr,
+                                      String paymentMethod,
+                                      String cashAccount,
+                                      BigDecimal amount) throws Exception {
         //url
         String endPointUlr = "/v2.0/disbursement/pay-out";
 
-        //sandbox
+        //default sandbox
         String requestPath = Constant.baseUrlSanbox + endPointUlr;
-        String merchantId = Constant.merchantIdSandBox;
-        String merchantSecret = Constant.merchantSecretSandBox;
-
         //production
-//        String requestPath = Constant.baseUrl + endPointUlr;
-//        String merchantId = Constant.merchantId;
-//        String merchantSecret = Constant.merchantSecret;
-
+        if (StringUtils.equals(env, "production")) {
+            requestPath = Constant.baseUrl + endPointUlr;
+        }
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        BigDecimal amount = new BigDecimal("200000");
 
-        //demo for INDONESIA ,replace AreaEnum paymentMethod to you what need
         AreaEnum areaEnum = AreaEnum.MEXICO;
-        String paymentMethod = "BANXICO";
 
         //generate parameter
-        String merchantOrderNo = (merchantId+ UUID.randomUUID()).replaceAll("-","")
-                .substring(0,32);
+        String merchantOrderNo = (merchantId + UUID.randomUUID()).replaceAll("-", "")
+                .substring(0, 32);
         String purpose = "Purpose For Disbursement from Java SDK";
 
         //moneyReq
@@ -77,7 +95,7 @@ public class PayoutRequestDemo {
         payoutReq.setMerchant(merchantReq);
         payoutReq.setCallbackUrl("your.notify.url");
         payoutReq.setPaymentMethod(paymentMethod);
-        payoutReq.setCashAccount("the cash account like:bank account number");
+        payoutReq.setCashAccount(cashAccount);
         payoutReq.setArea(areaEnum.getCode());
 
         //jsonStr by gson
@@ -92,7 +110,7 @@ public class PayoutRequestDemo {
 
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateStr);
 
 
         // create httpClient

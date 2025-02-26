@@ -9,6 +9,7 @@ import com.smilepayz.thailand.common.AreaEnum;
 import com.smilepayz.thailand.common.Constant;
 import com.smilepayz.thailand.common.SignatureUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,29 +34,53 @@ public class PayInRequestDemo {
 
     @SneakyThrows
     public static void main(String[] args) {
+        String env = "";
+        String merchantId = "";
+        String merchantSecret = "";
+        String privateKeyString = "";
+        String paymentMethod = "QRPAY";
+        String payerName = "test";
+        String payerBankName = "KBANK";
+        String payerAccountNo = "0232323212232";
+        BigDecimal amount = BigDecimal.valueOf(100);
+        doTransaction(env,
+                merchantId,
+                merchantSecret,
+                privateKeyString,
+                paymentMethod,
+                amount,
+                payerName,
+                payerBankName,
+                payerAccountNo);
+    }
+
+    public static void doTransaction(String env,
+                                     String merchantId,
+                                     String merchantSecret,
+                                     String privateKeyString,
+                                     String paymentMethod,
+                                     BigDecimal amount,
+                                     String payerName,
+                                     String payerBankName,
+                                     String payerAccountNo) throws Exception {
         System.out.println("=====>Payin transaction");
         String endPointUlr = "/v2.0/transaction/pay-in";
 
 
-        //sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
-        String merchantId = Constant.merchantIdSandBox;
-        String merchantSecret = Constant.merchantSecretSandBox;
-
+        //default sandbox
+        String requestPath =  Constant.baseUrlSanbox + endPointUlr;
         //production
-//        String requestPath = Constant.baseUrl + endPointUlr;
-//        String merchantId = Constant.merchantId;
-//        String merchantSecret = Constant.merchantSecret;
+        if (StringUtils.equals(env, "production")) {
+            requestPath =  Constant.baseUrl + endPointUlr;
+        }
 
         System.out.println("pay in request url = " + requestPath);
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        BigDecimal amount = new BigDecimal("1000");
 
         AreaEnum areaEnum = AreaEnum.THAILAND;
-        String paymentMethod = "QRPAY";
 
 
         //generate parameter
@@ -66,9 +91,9 @@ public class PayInRequestDemo {
         // additional parameter
         PayerReq payerReq = new PayerReq();
         //required for THB transaction
-        payerReq.setName("payer's name");
-        payerReq.setAccountNo("232121122112");
-        payerReq.setBankName("KBANK");
+        payerReq.setName(payerName);
+        payerReq.setAccountNo(payerAccountNo);
+        payerReq.setBankName(payerBankName);
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
@@ -100,7 +125,7 @@ public class PayInRequestDemo {
 
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateKeyString);
 
 
         // create httpClient

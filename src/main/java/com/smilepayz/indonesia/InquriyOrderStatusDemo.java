@@ -5,6 +5,7 @@ import com.smilepayz.indonesia.bean.InquiryOrderStatsuReq;
 import com.smilepayz.indonesia.common.Constant;
 import com.smilepayz.indonesia.common.SignatureUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -13,6 +14,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,33 +29,37 @@ public class InquriyOrderStatusDemo {
 
     @SneakyThrows
     public static void main(String[] args) {
+        String env = "";
+        String orderNo = "";
+        String tradeNo = "";
+
+        // 1 for pay-in order, 2 for pay-out order
+        Integer tradeType = 1;
+        String merchantId = "";
+        String merchantSecret = "";
+        String privateKeyString = "";
+        inquiryOrderStatus(env, merchantId, tradeType, orderNo, tradeNo, merchantSecret, privateKeyString);
+    }
+
+    public static void inquiryOrderStatus(String env, String merchantId, Integer tradeType, String orderNo, String tradeNo, String merchantSecret, String privateKey) throws IOException {
         System.out.println("=====>Payin transaction");
 
         //url
         String endPointUlr = "/v2.0/inquiry-status";
         //sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
-        String merchantId = Constant.merchantIdSandBox;
-        String merchantSecret = Constant.merchantSecretSandBox;
-
-        //production
-//        String requestPath = Constant.baseUrl + endPointUlr;
-//        String merchantId = Constant.merchantId;
-//        String merchantSecret = Constant.merchantSecret;
-
-
+        String requestPath = com.smilepayz.brazil.common.Constant.baseUrlSanbox + endPointUlr;
+        if (StringUtils.equals(env, "production")) {
+            requestPath = Constant.baseUrl + endPointUlr;
+        }
         System.out.println("request url = " + requestPath);
-
-
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
 
         InquiryOrderStatsuReq inquiryOrderStatsuReq = new InquiryOrderStatsuReq();
-        inquiryOrderStatsuReq.setOrderNo("merchant order no");
-        inquiryOrderStatsuReq.setTradeNo("platform trade no");
-        // 1 for pay-in order, 2 for pay-out order
-        inquiryOrderStatsuReq.setTradeType(1);
+        inquiryOrderStatsuReq.setOrderNo(orderNo);
+        inquiryOrderStatsuReq.setTradeNo(tradeNo);
+        inquiryOrderStatsuReq.setTradeType(tradeType);
 
         //jsonStr by gson
         Gson gson = new Gson();
@@ -61,13 +67,12 @@ public class InquriyOrderStatusDemo {
         System.out.println("jsonStr = " + jsonStr);
 
         //minify
-        String minify = SignatureUtils.minify(jsonStr);
+        String minify = com.smilepayz.brazil.common.SignatureUtils.minify(jsonStr);
         System.out.println("minify = " + minify);
 
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
-
+        String signature = SignatureUtils.sha256RsaSignature(content, privateKey);
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();

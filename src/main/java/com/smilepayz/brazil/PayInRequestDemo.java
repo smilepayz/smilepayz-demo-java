@@ -1,14 +1,15 @@
 package com.smilepayz.brazil;
 
 import com.google.gson.Gson;
-import com.smilepayz.brazil.common.SignatureUtils;
 import com.smilepayz.brazil.bean.MerchantReq;
 import com.smilepayz.brazil.bean.MoneyReq;
-import com.smilepayz.brazil.bean.TradePayinReq;
 import com.smilepayz.brazil.bean.PayerReq;
+import com.smilepayz.brazil.bean.TradePayinReq;
 import com.smilepayz.brazil.common.AreaEnum;
 import com.smilepayz.brazil.common.Constant;
+import com.smilepayz.brazil.common.SignatureUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -33,38 +35,47 @@ public class PayInRequestDemo {
 
     @SneakyThrows
     public static void main(String[] args) {
-        System.out.println("=====>Payin transaction");
+        String env = "";
+        String merchantId = "";
+        String merchantSecret = "";
+        String privateKeyString = "";
+        String paymentMethod = "PIX";
+        String pixAccount = "";
+        BigDecimal amount = BigDecimal.valueOf(100);
+        doTransaction(env,merchantId,merchantSecret,privateKeyString,paymentMethod,amount,pixAccount);
+    }
+
+    public static void doTransaction(String env, String merchantId,
+                                     String merchantSecret,
+                                     String privateKeyString,
+                                     String paymentMethod,
+                                     BigDecimal amount,
+                                     String pixAccount) throws Exception {
         String endPointUlr = "/v2.0/transaction/pay-in";
 
-
-        //sandbox
+        //default sandbox
         String requestPath = Constant.baseUrlSanbox + endPointUlr;
-        String merchantId = Constant.merchantIdSandBox;
-        String merchantSecret = Constant.merchantSecretSandBox;
-
         //production
-//        String requestPath = Constant.baseUrl + endPointUlr;
-//        String merchantId = Constant.merchantId;
-//        String merchantSecret = Constant.merchantSecret;
-
+        if (StringUtils.equals(env, "production")) {
+            requestPath = Constant.baseUrl + endPointUlr;
+        }
         System.out.println("pay in request url = " + requestPath);
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        BigDecimal amount = new BigDecimal("100");
+
         AreaEnum areaEnum = AreaEnum.BRAZIL;
-        String paymentMethod = "PIX";
 
 
         //generate orderNo
         String merchantOrderNo = merchantId.replace("sandbox-", "S") +
-                UUID.randomUUID().toString().replaceAll("-","");
+                UUID.randomUUID().toString().replaceAll("-", "");
         String purpose = "Purpose For Transaction from Java SDK";
 
         //payer info
         PayerReq payerInfo = new PayerReq();
-        payerInfo.setPixAccount("12345678901");
+        payerInfo.setPixAccount(pixAccount);
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
@@ -97,7 +108,7 @@ public class PayInRequestDemo {
 
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateKeyString);
 
 
         // create httpClient
@@ -123,7 +134,6 @@ public class PayInRequestDemo {
         EntityUtils.consume(httpEntity);
 
         System.out.println("======> request end ,request success");
-
 
     }
 }

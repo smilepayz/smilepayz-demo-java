@@ -8,6 +8,7 @@ import com.smilepayz.thailand.common.AreaEnum;
 import com.smilepayz.thailand.common.Constant;
 import com.smilepayz.thailand.common.SignatureUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -31,27 +32,49 @@ import java.util.UUID;
 public class PayoutRequestDemo {
     @SneakyThrows
     public static void main(String[] args) {
+        String env = "";
+        String merchantId = "";
+        String merchantSecret = "";
+        String privateStr = "";
+        String paymentMethod = "KBANK";
+        String cashAccount = "";
+        BigDecimal amount = BigDecimal.valueOf(10000);
+
+        doDisbursement(env,
+                merchantId,
+                merchantSecret,
+                privateStr,
+                paymentMethod,
+                cashAccount,
+                amount);
+
+    }
+
+    public static void doDisbursement(String env,
+                                      String merchantId,
+                                      String merchantSecret,
+                                      String privateStr,
+                                      String paymentMethod,
+                                      String cashAccount,
+                                      BigDecimal amount) throws Exception {
+
         //url
         String endPointUlr = "/v2.0/disbursement/pay-out";
 
-        //sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
-        String merchantId = Constant.merchantIdSandBox;
-        String merchantSecret = Constant.merchantSecretSandBox;
 
+        //default sandbox
+        String requestPath =  Constant.baseUrlSanbox + endPointUlr;
         //production
-//        String requestPath = Constant.baseUrl + endPointUlr;
-//        String merchantId = Constant.merchantId;
-//        String merchantSecret = Constant.merchantSecret;
+        if (StringUtils.equals(env, "production")) {
+            requestPath = Constant.baseUrl + endPointUlr;
+        }
 
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        BigDecimal amount = new BigDecimal("2000");
 
         AreaEnum areaEnum = AreaEnum.THAILAND;
-        String paymentMethod = "KBANK";
 
         //generate parameter
         String merchantOrderNo = merchantId.replace("sandbox-", "S") + UUID.randomUUID().toString();
@@ -74,7 +97,7 @@ public class PayoutRequestDemo {
         payoutReq.setMerchant(merchantReq);
         payoutReq.setCallbackUrl("your.notify.url");
         payoutReq.setPaymentMethod(paymentMethod);
-        payoutReq.setCashAccount("the cash account like:bank account number");
+        payoutReq.setCashAccount(cashAccount);
         payoutReq.setArea(areaEnum.getCode());
 
         //jsonStr by gson
@@ -89,7 +112,7 @@ public class PayoutRequestDemo {
 
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateStr);
 
 
         // create httpClient
@@ -115,6 +138,5 @@ public class PayoutRequestDemo {
         EntityUtils.consume(httpEntity);
 
         System.out.println("======> request end ,request success");
-
     }
 }

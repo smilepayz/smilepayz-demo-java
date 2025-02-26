@@ -5,6 +5,7 @@ import com.smilepayz.indonesia.bean.InquiryBalanceReq;
 import com.smilepayz.indonesia.common.Constant;
 import com.smilepayz.indonesia.common.SignatureUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -13,47 +14,49 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @Author Moore
  * @Date 2024/7/2 10:40
  **/
 public class InquiryBalanceDemo {
-
-
     @SneakyThrows
     public static void main(String[] args) {
-        System.out.println("=====>InquiryBalanceDemo");
+        String env = "";
+        String merchantId = "";
+        String accountNo = "";
+        String merchantSecret = "";
+        String privateKeyString = "";
+        inquiryBalance(env, accountNo, merchantId, merchantSecret, privateKeyString);
+    }
 
+    public static void inquiryBalance(String env, String accountNo, String merchantId, String merchantSecret, String privateKey) throws IOException {
+        System.out.println("=====>InquiryBalanceDemo");
         //url
         String endPointUlr = "/v2.0/inquiry-balance";
 
         //sandbox
-//        String requestPath = Constant.baseUrlSanbox + endPointUlr;
-//        String merchantId = Constant.merchantIdSandBox;
-//        String merchantSecret = Constant.merchantSecretSandBox;
-
-        //production
-        String requestPath = Constant.baseUrl + endPointUlr;
-        String merchantId = Constant.merchantId;
-        String merchantSecret = Constant.merchantSecret;
+        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        if (StringUtils.equals(env, "production")) {
+            requestPath = Constant.baseUrl + endPointUlr;
+        }
 
         System.out.println("InquiryBalanceDemo request url = " + requestPath);
-
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
 
         InquiryBalanceReq inquiryBalanceReq = new InquiryBalanceReq();
-        inquiryBalanceReq.setAccountNo("your account no");
-        inquiryBalanceReq.setBalanceTypes(Arrays.asList("BALANCE"));
+        inquiryBalanceReq.setAccountNo(accountNo);
+        inquiryBalanceReq.setBalanceTypes(Collections.singletonList("BALANCE"));
 
         //jsonStr by gson
         Gson gson = new Gson();
@@ -61,12 +64,12 @@ public class InquiryBalanceDemo {
         System.out.println("jsonStr = " + jsonStr);
 
         //minify
-        String minify = SignatureUtils.minify(jsonStr);
+        String minify = com.smilepayz.brazil.common.SignatureUtils.minify(jsonStr);
         System.out.println("minify = " + minify);
 
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateKey);
 
 
         // create httpClient
@@ -92,7 +95,5 @@ public class InquiryBalanceDemo {
         EntityUtils.consume(httpEntity);
 
         System.out.println("======> request end ,request success");
-
-
     }
 }
