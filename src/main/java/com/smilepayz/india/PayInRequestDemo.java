@@ -3,6 +3,7 @@ package com.smilepayz.india;
 import com.google.gson.Gson;
 import com.smilepayz.india.bean.MerchantReq;
 import com.smilepayz.india.bean.MoneyReq;
+import com.smilepayz.india.bean.PayerReq;
 import com.smilepayz.india.bean.TradePayinReq;
 import com.smilepayz.india.common.AreaEnum;
 import com.smilepayz.india.common.Constant;
@@ -38,8 +39,9 @@ public class PayInRequestDemo {
         String merchantSecret = "";
         String privateKeyString = "";
         String paymentMethod = "";
+        String email = "";
         BigDecimal amount = BigDecimal.valueOf(100);
-        doTransaction(env, merchantId, merchantSecret, privateKeyString,paymentMethod,amount);
+        doTransaction(env, merchantId, merchantSecret, privateKeyString,paymentMethod,amount,email);
     }
 
     public static void doTransaction(String env,
@@ -47,7 +49,8 @@ public class PayInRequestDemo {
                                      String merchantSecret,
                                      String privateKeyString,
                                      String paymentMethod,
-                                     BigDecimal amount) throws Exception {
+                                     BigDecimal amount,
+                                     String email) throws Exception {
         System.out.println("=====>Payin transaction");
         String endPointUlr = "/v2.0/transaction/pay-in";
 
@@ -79,6 +82,9 @@ public class PayInRequestDemo {
         MerchantReq merchantReq = new MerchantReq();
         merchantReq.setMerchantId(merchantId);
 
+        PayerReq payerReq = new PayerReq();
+        payerReq.setEmail(email);
+
         TradePayinReq payinReq = new TradePayinReq();
         payinReq.setOrderNo(merchantOrderNo);
         payinReq.setPurpose(purpose);
@@ -87,7 +93,7 @@ public class PayInRequestDemo {
         payinReq.setCallbackUrl("your.notify.url");        //replace this value
         payinReq.setPaymentMethod(paymentMethod);
         payinReq.setArea(areaEnum.getCode());
-
+        payinReq.setPayer(payerReq);
         //jsonStr by gson
         Gson gson = new Gson();
         String jsonStr = gson.toJson(payinReq);
