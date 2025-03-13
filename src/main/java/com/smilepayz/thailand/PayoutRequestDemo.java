@@ -1,13 +1,13 @@
 package com.smilepayz.thailand;
 
-import com.google.gson.Gson;
-import com.smilepayz.thailand.bean.MerchantReq;
-import com.smilepayz.thailand.bean.MoneyReq;
-import com.smilepayz.thailand.bean.TradePayoutReq;
-import com.smilepayz.thailand.common.AreaEnum;
-import com.smilepayz.thailand.common.Constant;
-import com.smilepayz.thailand.common.SignatureUtils;
-import lombok.SneakyThrows;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,13 +17,15 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
+import com.google.gson.Gson;
+import com.smilepayz.thailand.bean.MerchantReq;
+import com.smilepayz.thailand.bean.MoneyReq;
+import com.smilepayz.thailand.bean.TradePayoutReq;
+import com.smilepayz.thailand.common.AreaEnum;
+import com.smilepayz.thailand.common.Constant;
+import com.smilepayz.thailand.common.SignatureUtils;
+
+import lombok.SneakyThrows;
 
 /**
  * @Author Moore
@@ -63,10 +65,10 @@ public class PayoutRequestDemo {
 
 
         //default sandbox
-        String requestPath =  Constant.baseUrlSanbox + endPointUlr;
+        String requestPath =  Constant.BASE_URL_SANDBOX + endPointUlr;
         //production
         if (StringUtils.equals(env, "production")) {
-            requestPath = Constant.baseUrl + endPointUlr;
+            requestPath = Constant.BASE_URL + endPointUlr;
         }
 
 
