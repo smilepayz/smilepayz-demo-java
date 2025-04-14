@@ -1,23 +1,29 @@
 package com.smilepayz.thailand.common;
 
-import com.google.gson.Gson;
-import com.smilepayz.thailand.bean.MerchantReq;
-import com.smilepayz.thailand.bean.MoneyReq;
-import com.smilepayz.thailand.bean.TradePayinReq;
-import org.apache.commons.codec.binary.Base64;
-
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.apache.commons.codec.binary.Base64;
+
+import com.google.gson.Gson;
+import com.smilepayz.thailand.bean.MerchantReq;
+import com.smilepayz.thailand.bean.MoneyReq;
+import com.smilepayz.thailand.bean.TradePayinReq;
 
 /**
  * @Author Moore
@@ -90,8 +96,8 @@ public class SignatureUtils {
             signature.update(stringToSign.getBytes(StandardCharsets.UTF_8));
             byte[] signed = signature.sign();
             return java.util.Base64.getEncoder().encodeToString(signed);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | InvalidKeyException | SignatureException e) {
+            System.err.println("Failed to generate signature: " + e.getMessage());
         }
         return null;
     }
@@ -107,8 +113,8 @@ public class SignatureUtils {
             signature.initVerify(publicKey);
             signature.update(content.getBytes(encode));
             return signature.verify(Base64.decodeBase64(signed));
-        } catch (Exception e) {
-            System.out.println("Sign doCheck exception:" + e);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | InvalidKeyException | SignatureException | IllegalArgumentException | UnsupportedEncodingException e) {
+            System.err.println("Signature verification failed: " + e.getMessage());
         }
         return false;
     }
@@ -151,12 +157,12 @@ public class SignatureUtils {
         String content = String.join("|", timestamp, sandboxMerchantCode, minify);
         System.out.println("sign string =" + content);
 
-        String signature = SignatureUtils.sha256RsaSignature(content, Constant.privateKeyStr);
+        String signature = SignatureUtils.sha256RsaSignature(content, Constant.PRIVATE_KEY_STR);
 
         System.out.println("signature=" + signature);
 
 
-        boolean b = SignatureUtils.checkSha256RsaSignature(content, signature, Constant.publicKeyStr, "UTF-8");
+        boolean b = SignatureUtils.checkSha256RsaSignature(content, signature, Constant.PUBLIC_KEY_STR, "UTF-8");
         System.out.println("check signature result=" + b);
 
 

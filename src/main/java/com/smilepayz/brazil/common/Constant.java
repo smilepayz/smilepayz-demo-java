@@ -6,15 +6,15 @@ package com.smilepayz.brazil.common;
  **/
 public class Constant {
 
-    public static final String privateKeyStr = "Merchant Private Key";
-    public static final String publicKeyStr = "Platform Public Key";
+    public static final String PRIVATE_KEY_STR = "Merchant Private Key";
+    public static final String PUBLIC_KEY_STR = "Platform Public Key";
 
-    public static final String baseUrlSanbox = "https://sandbox-gateway.smilepayz.com";
-    public static final String baseUrl = "https://gateway.smilepayz.com";
-    public static final String merchantId = "your merchant id";
-    public static final String merchantIdSandBox = "your merchant id in sandbox";
-    public static final String merchantSecret = "Merchant Secret";
-    public static final String merchantSecretSandBox = "Merchant Secret in sandbox";
+    public static final String BASE_URL_SANDBOX = "https://sandbox-gateway.smilepayz.com";
+    public static final String BASE_URL = "https://gateway.smilepayz.com";
+    public static final String MERCHANT_ID = "your merchant id";
+    public static final String MERCHANT_ID_SANDBOX = "your merchant id in sandbox";
+    public static final String MERCHANT_SECRET = "Merchant Secret";
+    public static final String MERCHANT_SECRET_SANDBOX = "Merchant Secret in sandbox";
 
 
 

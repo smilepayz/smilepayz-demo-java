@@ -1,10 +1,13 @@
 package com.smilepayz.indonesia;
 
-import com.google.gson.Gson;
-import com.smilepayz.indonesia.bean.InquiryBalanceReq;
-import com.smilepayz.indonesia.common.Constant;
-import com.smilepayz.indonesia.common.SignatureUtils;
-import lombok.SneakyThrows;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,13 +17,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
+import com.google.gson.Gson;
+import com.smilepayz.indonesia.bean.InquiryBalanceReq;
+import com.smilepayz.indonesia.common.Constant;
+import com.smilepayz.indonesia.common.SignatureUtils;
+
+import lombok.SneakyThrows;
 
 /**
  * @Author Moore
@@ -43,9 +45,9 @@ public class InquiryBalanceDemo {
         String endPointUlr = "/v2.0/inquiry-balance";
 
         //sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String requestPath = Constant.BASE_URL_SANDBOX + endPointUlr;
         if (StringUtils.equals(env, "production")) {
-            requestPath = Constant.baseUrl + endPointUlr;
+            requestPath = Constant.BASE_URL + endPointUlr;
         }
 
         System.out.println("InquiryBalanceDemo request url = " + requestPath);
