@@ -1,9 +1,9 @@
-package com.smilepayz.colombia;
+package com.smilepayz.philippines;
 
 import com.google.gson.Gson;
-import com.smilepayz.colombia.bean.InquiryOrderStatsuReq;
-import com.smilepayz.colombia.common.Constant;
-import com.smilepayz.colombia.common.SignatureUtils;
+import com.smilepayz.philippines.bean.InquiryBalanceReq;
+import com.smilepayz.philippines.common.Constant;
+import com.smilepayz.philippines.common.SignatureUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
@@ -20,50 +20,48 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 
 /**
  * @Author Moore
- * @Date 2024/7/2 10:41
+ * @Date 2024/7/2 10:40
  **/
-public class InquriyOrderStatusDemo {
+public class InquiryBalanceDemo {
 
     @SneakyThrows
     public static void main(String[] args) {
-        String env = "";
-        String orderNo = "";
-        String tradeNo = "";
-
-        // 1 for pay-in order, 2 for pay-out order
-        Integer tradeType = 1;
+        String env = "sandbox";
         String merchantId = "";
+        String accountNo = "";
         String merchantSecret = "";
         String privateKeyString = "";
-        inquiryOrderStatus(env, merchantId, tradeType, orderNo, tradeNo, merchantSecret, privateKeyString);
+        inquiryBalance(env, accountNo, merchantId, merchantSecret, privateKeyString);
     }
 
-    public static void inquiryOrderStatus(String env, String merchantId, Integer tradeType, String orderNo, String tradeNo, String merchantSecret, String privateKey) throws IOException {
-        System.out.println("=====>Payin transaction");
-
+    public static void inquiryBalance(String env, String accountNo, String merchantId, String merchantSecret, String privateKey) throws IOException {
+        System.out.println("=====>InquiryBalanceDemo");
         //url
-        String endPointUlr = "/v2.0/inquiry-status";
+        String endPointUlr = "/v2.0/inquiry-balance";
+
         //sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String requestPath = Constant.BASE_URL_SANDBOX + endPointUlr;
         if (StringUtils.equals(env, "production")) {
-            requestPath = Constant.baseUrl + endPointUlr;
+            requestPath = Constant.BASE_URL + endPointUlr;
         }
-        System.out.println("request url = " + requestPath);
+
+        System.out.println("InquiryBalanceDemo request url = " + requestPath);
+
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
 
-        InquiryOrderStatsuReq inquiryOrderStatsuReq = new InquiryOrderStatsuReq();
-        inquiryOrderStatsuReq.setOrderNo(orderNo);
-        inquiryOrderStatsuReq.setTradeNo(tradeNo);
-        inquiryOrderStatsuReq.setTradeType(tradeType);
+        InquiryBalanceReq inquiryBalanceReq = new InquiryBalanceReq();
+        inquiryBalanceReq.setAccountNo(accountNo);
+        inquiryBalanceReq.setBalanceTypes(Collections.singletonList("BALANCE"));
 
         //jsonStr by gson
         Gson gson = new Gson();
-        String jsonStr = gson.toJson(inquiryOrderStatsuReq);
+        String jsonStr = gson.toJson(inquiryBalanceReq);
         System.out.println("jsonStr = " + jsonStr);
 
         //minify
@@ -73,6 +71,7 @@ public class InquriyOrderStatusDemo {
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
         String signature = SignatureUtils.sha256RsaSignature(content, privateKey);
+
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();
@@ -97,7 +96,5 @@ public class InquriyOrderStatusDemo {
         EntityUtils.consume(httpEntity);
 
         System.out.println("======> request end ,request success");
-
-
     }
 }

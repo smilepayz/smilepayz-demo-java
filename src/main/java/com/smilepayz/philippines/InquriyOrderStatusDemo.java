@@ -1,9 +1,9 @@
-package com.smilepayz.colombia;
+package com.smilepayz.philippines;
 
 import com.google.gson.Gson;
-import com.smilepayz.colombia.bean.InquiryOrderStatsuReq;
-import com.smilepayz.colombia.common.Constant;
-import com.smilepayz.colombia.common.SignatureUtils;
+import com.smilepayz.philippines.bean.InquiryOrderStatsuReq;
+import com.smilepayz.philippines.common.Constant;
+import com.smilepayz.philippines.common.SignatureUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
@@ -29,10 +29,9 @@ public class InquriyOrderStatusDemo {
 
     @SneakyThrows
     public static void main(String[] args) {
-        String env = "";
+        String env = "sandbox";
         String orderNo = "";
         String tradeNo = "";
-
         // 1 for pay-in order, 2 for pay-out order
         Integer tradeType = 1;
         String merchantId = "";
@@ -41,15 +40,21 @@ public class InquriyOrderStatusDemo {
         inquiryOrderStatus(env, merchantId, tradeType, orderNo, tradeNo, merchantSecret, privateKeyString);
     }
 
-    public static void inquiryOrderStatus(String env, String merchantId, Integer tradeType, String orderNo, String tradeNo, String merchantSecret, String privateKey) throws IOException {
+    public static void inquiryOrderStatus(String env,
+                                          String merchantId,
+                                          Integer tradeType,
+                                          String orderNo,
+                                          String tradeNo,
+                                          String merchantSecret,
+                                          String privateKey) throws IOException {
         System.out.println("=====>Payin transaction");
 
         //url
         String endPointUlr = "/v2.0/inquiry-status";
         //sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String requestPath = Constant.BASE_URL_SANDBOX + endPointUlr;
         if (StringUtils.equals(env, "production")) {
-            requestPath = Constant.baseUrl + endPointUlr;
+            requestPath = Constant.BASE_URL + endPointUlr;
         }
         System.out.println("request url = " + requestPath);
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))

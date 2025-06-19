@@ -47,7 +47,7 @@ public class InquriyOrderStatusDemo {
         //url
         String endPointUlr = "/v2.0/inquiry-status";
         //sandbox
-        String requestPath = com.smilepayz.brazil.common.Constant.baseUrlSanbox + endPointUlr;
+        String requestPath = Constant.baseUrlSanbox + endPointUlr;
         if (StringUtils.equals(env, "production")) {
             requestPath = Constant.baseUrl + endPointUlr;
         }
