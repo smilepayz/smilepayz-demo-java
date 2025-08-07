@@ -103,7 +103,6 @@ public class PayoutRequestDemo {
         payoutReq.setPaymentMethod(paymentMethod);
         payoutReq.setCashAccount(cashAccount);
         payoutReq.setIfscCode(ifscCode);
-        payoutReq.setArea(AreaEnum.INDIA.getCode());
 
         //jsonStr by gson
         Gson gson = new Gson();

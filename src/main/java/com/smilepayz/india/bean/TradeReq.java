@@ -60,13 +60,6 @@ public class TradeReq {
      */
     private String redirectUrl;
 
-    /**
-     * area
-     */
-    private Integer area;
-
-
-
     //----------------------------------
 
     public String getOrderNo() {
@@ -155,13 +148,5 @@ public class TradeReq {
 
     public void setRedirectUrl(String redirectUrl) {
         this.redirectUrl = redirectUrl;
-    }
-
-    public Integer getArea() {
-        return area;
-    }
-
-    public void setArea(Integer area) {
-        this.area = area;
     }
 }

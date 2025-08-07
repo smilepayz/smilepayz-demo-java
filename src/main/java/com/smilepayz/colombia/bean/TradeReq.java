@@ -60,12 +60,6 @@ public class TradeReq {
      */
     private String redirectUrl;
 
-    /**
-     * area
-     */
-    private Integer area;
-
-
 
     //----------------------------------
 
@@ -157,11 +151,4 @@ public class TradeReq {
         this.redirectUrl = redirectUrl;
     }
 
-    public Integer getArea() {
-        return area;
-    }
-
-    public void setArea(Integer area) {
-        this.area = area;
-    }
 }

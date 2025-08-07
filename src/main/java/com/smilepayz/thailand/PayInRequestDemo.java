@@ -113,7 +113,6 @@ public class PayInRequestDemo {
         payinReq.setMerchant(merchantReq);
         payinReq.setCallbackUrl("your.notify.url");
         payinReq.setPaymentMethod(paymentMethod);
-        payinReq.setArea(areaEnum.getCode());
         payinReq.setPayer(payerReq);
 
         //jsonStr by gson

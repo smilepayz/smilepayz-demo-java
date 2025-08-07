@@ -114,7 +114,6 @@ public class PayoutRequestDemo {
         payoutReq.setPaymentMethod(paymentMethod);
         payoutReq.setCashAccount(cashAccount);
         payoutReq.setCashAccountType(cashAccountType);
-        payoutReq.setArea(areaEnum.getCode());
         payoutReq.setReceiver(receiverReq);
 
         //jsonStr by gson

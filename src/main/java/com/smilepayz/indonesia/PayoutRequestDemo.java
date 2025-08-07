@@ -101,7 +101,6 @@ public class PayoutRequestDemo {
         payoutReq.setCallbackUrl("your.notify.url");
         payoutReq.setPaymentMethod(paymentMethod);
         payoutReq.setCashAccount(cashAccount);
-        payoutReq.setArea(areaEnum.getCode());
 
         //jsonStr by gson
         Gson gson = new Gson();

@@ -95,7 +95,6 @@ public class PayInRequestDemo {
         payinReq.setMerchant(merchantReq);
         payinReq.setCallbackUrl("https://your call back url that receive the order status notification");//replace this value
         payinReq.setPaymentMethod(paymentMethod);
-        payinReq.setArea(areaEnum.getCode());
         payinReq.setPayer(payerInfo);
 
         //jsonStr by gson
