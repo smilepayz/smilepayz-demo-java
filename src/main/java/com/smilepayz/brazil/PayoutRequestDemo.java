@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import com.smilepayz.brazil.common.CurrencyEnum;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,7 +23,6 @@ import com.smilepayz.brazil.bean.MerchantReq;
 import com.smilepayz.brazil.bean.MoneyReq;
 import com.smilepayz.brazil.bean.ReceiverReq;
 import com.smilepayz.brazil.bean.TradePayoutReq;
-import com.smilepayz.brazil.common.AreaEnum;
 import com.smilepayz.brazil.common.Constant;
 import com.smilepayz.brazil.common.SignatureUtils;
 
@@ -76,7 +76,6 @@ public class PayoutRequestDemo {
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        AreaEnum areaEnum = AreaEnum.BRAZIL;
 
         //generate parameter
         String merchantOrderNo = (merchantId + UUID.randomUUID()).replaceAll("-", "").substring(0, 32);
@@ -84,7 +83,7 @@ public class PayoutRequestDemo {
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(areaEnum.getCurrency().name());
+        moneyReq.setCurrency(CurrencyEnum.IDR.name());
         moneyReq.setAmount(amount);
 
         //merchantReq

@@ -1,13 +1,12 @@
-package com.smilepayz.colombia;
+package com.smilepayz.vietnam;
 
 import com.google.gson.Gson;
-import com.smilepayz.colombia.bean.MerchantReq;
-import com.smilepayz.colombia.bean.MoneyReq;
-import com.smilepayz.colombia.bean.PayerReq;
-import com.smilepayz.colombia.bean.TradePayinReq;
-import com.smilepayz.colombia.common.Constant;
-import com.smilepayz.colombia.common.CurrencyEnum;
-import com.smilepayz.colombia.common.SignatureUtils;
+import com.smilepayz.philippines.common.CurrencyEnum;
+import com.smilepayz.vietnam.bean.MerchantReq;
+import com.smilepayz.vietnam.bean.MoneyReq;
+import com.smilepayz.vietnam.bean.TradePayoutReq;
+import com.smilepayz.vietnam.common.Constant;
+import com.smilepayz.vietnam.common.SignatureUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
@@ -28,83 +27,90 @@ import java.util.UUID;
 
 /**
  * @Author Moore
- * @Date 2024/6/27 14:16
+ * @Date 2024/6/27 14:21
  **/
-public class PayInRequestDemo {
-
+public class PayoutRequestDemo {
     @SneakyThrows
     public static void main(String[] args) {
         String env = "";
         String merchantId = "";
         String merchantSecret = "";
-        String privateKeyString = "";
-        String paymentMethod = "";
+        String privateStr = "";
+        String paymentMethod = "KBANK";
+        String cashAccount = "";
         BigDecimal amount = BigDecimal.valueOf(10000);
-        String payerName = "";
-        doTransaction(env, merchantId, merchantSecret, privateKeyString, paymentMethod, amount,payerName);
+
+        doDisbursement(env,
+                merchantId,
+                merchantSecret,
+                privateStr,
+                paymentMethod,
+                cashAccount,
+                amount);
+
     }
 
-    public static void doTransaction(String env,
-                                     String merchantId,
-                                     String merchantSecret,
-                                     String privateKeyString,
-                                     String paymentMethod,
-                                     BigDecimal amount,
-                                     String payerName) throws Exception {
-        System.out.println("=====>Payin transaction");
-        String endPointUlr = "/v2.0/transaction/pay-in";
+    public static void doDisbursement(String env,
+                                      String merchantId,
+                                      String merchantSecret,
+                                      String privateStr,
+                                      String paymentMethod,
+                                      String cashAccount,
+                                      BigDecimal amount) throws Exception {
+
+        //url
+        String endPointUlr = "/v2.0/disbursement/pay-out";
+
 
         //default sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String requestPath =  Constant.BASE_URL_SANDBOX + endPointUlr;
         //production
         if (StringUtils.equals(env, "production")) {
-            requestPath = Constant.baseUrl + endPointUlr;
+            requestPath = Constant.BASE_URL + endPointUlr;
         }
 
-        System.out.println("pay in request url = " + requestPath);
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
 
         //generate parameter
-        String merchantOrderNo = (merchantId + UUID.randomUUID()).replaceAll("-", "")
-                .substring(0, 32);
-        String purpose = "Purpose For Transaction from Java SDK";
-
-        PayerReq payerReq = new PayerReq();
-        payerReq.setName(payerName);//required for colombia
+        String merchantOrderNo = merchantId.replace("sandbox-", "S") + UUID.randomUUID().toString();
+        String purpose = "Purpose For Disbursement from Java SDK";
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(CurrencyEnum.COL.name());
+        moneyReq.setCurrency(CurrencyEnum.THB.name());
         moneyReq.setAmount(amount);
 
         //merchantReq
         MerchantReq merchantReq = new MerchantReq();
         merchantReq.setMerchantId(merchantId);
 
-        TradePayinReq payinReq = new TradePayinReq();
-        payinReq.setOrderNo(merchantOrderNo);
-        payinReq.setPurpose(purpose);
-        payinReq.setMoney(moneyReq);
-        payinReq.setMerchant(merchantReq);
-        payinReq.setCallbackUrl("your.notify.url");//replace this value
-        payinReq.setPaymentMethod(paymentMethod);
-        payinReq.setPayer(payerReq);
+        //payoutReq
+        TradePayoutReq payoutReq = new TradePayoutReq();
+        payoutReq.setOrderNo(merchantOrderNo);
+        payoutReq.setPurpose(purpose);
+        payoutReq.setMoney(moneyReq);
+        payoutReq.setMerchant(merchantReq);
+        payoutReq.setCallbackUrl("your.notify.url");
+        payoutReq.setPaymentMethod(paymentMethod);
+        payoutReq.setCashAccount(cashAccount);
 
         //jsonStr by gson
         Gson gson = new Gson();
-        String jsonStr = gson.toJson(payinReq);
+        String jsonStr = gson.toJson(payoutReq);
         System.out.println("jsonStr = " + jsonStr);
 
         //minify
         String minify = SignatureUtils.minify(jsonStr);
         System.out.println("minify = " + minify);
 
+
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
-        String signature = SignatureUtils.sha256RsaSignature(content, privateKeyString);
+        String signature = SignatureUtils.sha256RsaSignature(content, privateStr);
+
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();
@@ -116,7 +122,7 @@ public class PayInRequestDemo {
 
         // set entity
         httpPost.setEntity(new StringEntity(jsonStr, StandardCharsets.UTF_8));
-
+        System.out.println(requestPath);
         // send
         HttpResponse response = httpClient.execute(httpPost);
 
@@ -129,6 +135,5 @@ public class PayInRequestDemo {
         EntityUtils.consume(httpEntity);
 
         System.out.println("======> request end ,request success");
-
     }
 }

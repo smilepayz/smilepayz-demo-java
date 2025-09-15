@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import com.smilepayz.philippines.common.CurrencyEnum;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,7 +22,6 @@ import com.google.gson.Gson;
 import com.smilepayz.thailand.bean.MerchantReq;
 import com.smilepayz.thailand.bean.MoneyReq;
 import com.smilepayz.thailand.bean.TradePayoutReq;
-import com.smilepayz.thailand.common.AreaEnum;
 import com.smilepayz.thailand.common.Constant;
 import com.smilepayz.thailand.common.SignatureUtils;
 
@@ -76,15 +76,13 @@ public class PayoutRequestDemo {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
 
-        AreaEnum areaEnum = AreaEnum.THAILAND;
-
         //generate parameter
         String merchantOrderNo = merchantId.replace("sandbox-", "S") + UUID.randomUUID().toString();
         String purpose = "Purpose For Disbursement from Java SDK";
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(areaEnum.getCurrency().name());
+        moneyReq.setCurrency(CurrencyEnum.THB.name());
         moneyReq.setAmount(amount);
 
         //merchantReq

@@ -5,8 +5,8 @@ import com.smilepayz.philippines.bean.MerchantReq;
 import com.smilepayz.philippines.bean.MoneyReq;
 import com.smilepayz.philippines.bean.PayerReq;
 import com.smilepayz.philippines.bean.TradePayinReq;
-import com.smilepayz.philippines.common.AreaEnum;
 import com.smilepayz.philippines.common.Constant;
+import com.smilepayz.philippines.common.CurrencyEnum;
 import com.smilepayz.philippines.common.SignatureUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
@@ -70,7 +70,6 @@ public class PayInRequestDemo {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
 
-        AreaEnum areaEnum = AreaEnum.PHILIPPINES;
         //generate parameter
         String merchantOrderNo = (merchantId + UUID.randomUUID()).replaceAll("-", "")
                 .substring(0, 32);
@@ -79,7 +78,7 @@ public class PayInRequestDemo {
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(areaEnum.getCurrency().name());
+        moneyReq.setCurrency(CurrencyEnum.PHP.name());
         moneyReq.setAmount(amount);
 
         //merchantReq

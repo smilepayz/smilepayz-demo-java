@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import com.smilepayz.brazil.common.CurrencyEnum;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,7 +23,6 @@ import com.smilepayz.brazil.bean.MerchantReq;
 import com.smilepayz.brazil.bean.MoneyReq;
 import com.smilepayz.brazil.bean.PayerReq;
 import com.smilepayz.brazil.bean.TradePayinReq;
-import com.smilepayz.brazil.common.AreaEnum;
 import com.smilepayz.brazil.common.Constant;
 import com.smilepayz.brazil.common.SignatureUtils;
 
@@ -66,9 +66,6 @@ public class PayInRequestDemo {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
 
-        AreaEnum areaEnum = AreaEnum.BRAZIL;
-
-
         //generate orderNo
         String merchantOrderNo = merchantId.replace("sandbox-", "S") +
                 UUID.randomUUID().toString().replaceAll("-", "");
@@ -80,7 +77,7 @@ public class PayInRequestDemo {
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(areaEnum.getCurrency().name());
+        moneyReq.setCurrency(CurrencyEnum.BRL.name());
         moneyReq.setAmount(amount);
 
         //merchantReq

@@ -1,13 +1,13 @@
-package com.smilepayz.colombia;
+package com.smilepayz.vietnam;
 
 import com.google.gson.Gson;
-import com.smilepayz.colombia.bean.MerchantReq;
-import com.smilepayz.colombia.bean.MoneyReq;
-import com.smilepayz.colombia.bean.PayerReq;
-import com.smilepayz.colombia.bean.TradePayinReq;
-import com.smilepayz.colombia.common.Constant;
-import com.smilepayz.colombia.common.CurrencyEnum;
-import com.smilepayz.colombia.common.SignatureUtils;
+import com.smilepayz.vietnam.bean.MerchantReq;
+import com.smilepayz.vietnam.bean.MoneyReq;
+import com.smilepayz.vietnam.bean.PayerReq;
+import com.smilepayz.vietnam.bean.TradePayinReq;
+import com.smilepayz.vietnam.common.Constant;
+import com.smilepayz.vietnam.common.CurrencyEnum;
+import com.smilepayz.vietnam.common.SignatureUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
@@ -38,10 +38,14 @@ public class PayInRequestDemo {
         String merchantId = "";
         String merchantSecret = "";
         String privateKeyString = "";
-        String paymentMethod = "";
-        BigDecimal amount = BigDecimal.valueOf(10000);
-        String payerName = "";
-        doTransaction(env, merchantId, merchantSecret, privateKeyString, paymentMethod, amount,payerName);
+        String paymentMethod = "MOMO";
+        BigDecimal amount = BigDecimal.valueOf(50000);
+        doTransaction(env,
+                merchantId,
+                merchantSecret,
+                privateKeyString,
+                paymentMethod,
+                amount);
     }
 
     public static void doTransaction(String env,
@@ -49,16 +53,16 @@ public class PayInRequestDemo {
                                      String merchantSecret,
                                      String privateKeyString,
                                      String paymentMethod,
-                                     BigDecimal amount,
-                                     String payerName) throws Exception {
+                                     BigDecimal amount) throws Exception {
         System.out.println("=====>Payin transaction");
         String endPointUlr = "/v2.0/transaction/pay-in";
 
+
         //default sandbox
-        String requestPath = Constant.baseUrlSanbox + endPointUlr;
+        String requestPath =  Constant.BASE_URL_SANDBOX + endPointUlr;
         //production
         if (StringUtils.equals(env, "production")) {
-            requestPath = Constant.baseUrl + endPointUlr;
+            requestPath =  Constant.BASE_URL + endPointUlr;
         }
 
         System.out.println("pay in request url = " + requestPath);
@@ -72,12 +76,9 @@ public class PayInRequestDemo {
                 .substring(0, 32);
         String purpose = "Purpose For Transaction from Java SDK";
 
-        PayerReq payerReq = new PayerReq();
-        payerReq.setName(payerName);//required for colombia
-
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(CurrencyEnum.COL.name());
+        moneyReq.setCurrency(CurrencyEnum.VND.name());
         moneyReq.setAmount(amount);
 
         //merchantReq
@@ -89,9 +90,8 @@ public class PayInRequestDemo {
         payinReq.setPurpose(purpose);
         payinReq.setMoney(moneyReq);
         payinReq.setMerchant(merchantReq);
-        payinReq.setCallbackUrl("your.notify.url");//replace this value
+        payinReq.setCallbackUrl("your.notify.url");
         payinReq.setPaymentMethod(paymentMethod);
-        payinReq.setPayer(payerReq);
 
         //jsonStr by gson
         Gson gson = new Gson();
@@ -105,6 +105,7 @@ public class PayInRequestDemo {
         //signature
         String content = String.join("|", timestamp, merchantSecret, minify);
         String signature = SignatureUtils.sha256RsaSignature(content, privateKeyString);
+
 
         // create httpClient
         HttpClient httpClient = HttpClients.createDefault();
@@ -129,6 +130,7 @@ public class PayInRequestDemo {
         EntityUtils.consume(httpEntity);
 
         System.out.println("======> request end ,request success");
+
 
     }
 }

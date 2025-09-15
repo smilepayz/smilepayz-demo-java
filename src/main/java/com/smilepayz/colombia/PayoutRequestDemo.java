@@ -5,8 +5,8 @@ import com.smilepayz.colombia.bean.MerchantReq;
 import com.smilepayz.colombia.bean.MoneyReq;
 import com.smilepayz.colombia.bean.ReceiverReq;
 import com.smilepayz.colombia.bean.TradePayoutReq;
-import com.smilepayz.colombia.common.AreaEnum;
 import com.smilepayz.colombia.common.Constant;
+import com.smilepayz.colombia.common.CurrencyEnum;
 import com.smilepayz.colombia.common.SignatureUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
@@ -87,7 +87,6 @@ public class PayoutRequestDemo {
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        AreaEnum areaEnum = AreaEnum.PERU;
 
         //generate parameter
         String merchantOrderNo = (merchantId + UUID.randomUUID()).replaceAll("-", "")
@@ -96,7 +95,7 @@ public class PayoutRequestDemo {
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(areaEnum.getCurrency().name());
+        moneyReq.setCurrency(CurrencyEnum.COL.name());
         moneyReq.setAmount(amount);
 
         //merchantReq
