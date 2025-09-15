@@ -2,6 +2,6 @@ package com.smilepayz.indonesia.common;
 
 public enum CurrencyEnum {
 
-    IDR, THB, INR, BRL,MXN,USDT,BTC
+    IDR, THB, INR, BRL,MXN,USDT,BTC,PHP,VND
 
 }

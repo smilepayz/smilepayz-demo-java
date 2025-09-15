@@ -1,13 +1,13 @@
 package com.smilepayz.indonesia;
 
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
-
+import com.google.gson.Gson;
+import com.smilepayz.indonesia.bean.MerchantReq;
+import com.smilepayz.indonesia.bean.MoneyReq;
+import com.smilepayz.indonesia.bean.TradePayoutReq;
+import com.smilepayz.indonesia.common.Constant;
+import com.smilepayz.indonesia.common.CurrencyEnum;
+import com.smilepayz.indonesia.common.SignatureUtils;
+import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,15 +17,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.Gson;
-import com.smilepayz.indonesia.bean.MerchantReq;
-import com.smilepayz.indonesia.bean.MoneyReq;
-import com.smilepayz.indonesia.bean.TradePayoutReq;
-import com.smilepayz.indonesia.common.AreaEnum;
-import com.smilepayz.indonesia.common.Constant;
-import com.smilepayz.indonesia.common.SignatureUtils;
-
-import lombok.SneakyThrows;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 /**
  * @Author Moore
@@ -65,17 +63,16 @@ public class PayoutRequestDemo {
         String endPointUlr = "/v2.0/disbursement/pay-out";
 
         //default sandbox
-        String requestPath =  Constant.BASE_URL_SANDBOX + endPointUlr;
+        String requestPath = Constant.BASE_URL_SANDBOX + endPointUlr;
         //production
         if (StringUtils.equals(env, "production")) {
-            requestPath =  Constant.BASE_URL + endPointUlr;
+            requestPath = Constant.BASE_URL + endPointUlr;
         }
 
 
         String timestamp = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println("timestamp = " + timestamp);
-        AreaEnum areaEnum = AreaEnum.INDONESIA;
 
         //generate parameter
         String merchantOrderNo = (merchantId + UUID.randomUUID()).replaceAll("-", "")
@@ -84,7 +81,7 @@ public class PayoutRequestDemo {
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(areaEnum.getCurrency().name());
+        moneyReq.setCurrency(CurrencyEnum.IDR.name());
         moneyReq.setAmount(amount);
 
         //merchantReq

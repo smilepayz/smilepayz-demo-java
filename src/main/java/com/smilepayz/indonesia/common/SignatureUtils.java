@@ -146,7 +146,6 @@ public class SignatureUtils {
         //replace this value
         payinReq.setCallbackUrl("https:your.dome.com/your.notify.path");
         payinReq.setPaymentMethod(paymentMethod);
-        payinReq.setArea(AreaEnum.INDONESIA.getCode());
 
         Gson gson = new Gson();
         String jsonStr = gson.toJson(payinReq);
