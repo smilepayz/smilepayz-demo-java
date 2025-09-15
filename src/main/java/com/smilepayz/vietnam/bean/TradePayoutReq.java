@@ -13,6 +13,7 @@ public class TradePayoutReq extends TradeReq {
      * The withdrawal account number may be a bank card number, a wallet account number, or something else
      */
     private String cashAccount;
+    private String cashAccountType;
 
     /**
      * payer info
@@ -23,6 +24,15 @@ public class TradePayoutReq extends TradeReq {
      * receiver info
      */
     private ReceiverReq receiver;
+
+
+    public String getCashAccountType() {
+        return cashAccountType;
+    }
+
+    public void setCashAccountType(String cashAccountType) {
+        this.cashAccountType = cashAccountType;
+    }
 
     public String getPaymentMethod() {
         return paymentMethod;

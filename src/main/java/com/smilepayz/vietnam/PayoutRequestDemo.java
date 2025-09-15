@@ -1,11 +1,12 @@
 package com.smilepayz.vietnam;
 
 import com.google.gson.Gson;
-import com.smilepayz.philippines.common.CurrencyEnum;
 import com.smilepayz.vietnam.bean.MerchantReq;
 import com.smilepayz.vietnam.bean.MoneyReq;
+import com.smilepayz.vietnam.bean.ReceiverReq;
 import com.smilepayz.vietnam.bean.TradePayoutReq;
 import com.smilepayz.vietnam.common.Constant;
+import com.smilepayz.vietnam.common.CurrencyEnum;
 import com.smilepayz.vietnam.common.SignatureUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.StringUtils;
@@ -36,9 +37,13 @@ public class PayoutRequestDemo {
         String merchantId = "";
         String merchantSecret = "";
         String privateStr = "";
-        String paymentMethod = "KBANK";
+        String paymentMethod = "ABB";
         String cashAccount = "";
-        BigDecimal amount = BigDecimal.valueOf(10000);
+        String cashAccountType = "TO_PROVATE";//TO_PUBLIC
+        String receiverName ="";
+        String receiverPhone = "";
+        String email = "" ;
+        BigDecimal amount = BigDecimal.valueOf(50000);
 
         doDisbursement(env,
                 merchantId,
@@ -46,6 +51,10 @@ public class PayoutRequestDemo {
                 privateStr,
                 paymentMethod,
                 cashAccount,
+                cashAccountType,
+                receiverName,
+                receiverPhone,
+                email,
                 amount);
 
     }
@@ -56,6 +65,10 @@ public class PayoutRequestDemo {
                                       String privateStr,
                                       String paymentMethod,
                                       String cashAccount,
+                                      String cashAccountType,
+                                      String receiverName,
+                                      String receiverPhone,
+                                      String email,
                                       BigDecimal amount) throws Exception {
 
         //url
@@ -80,13 +93,17 @@ public class PayoutRequestDemo {
 
         //moneyReq
         MoneyReq moneyReq = new MoneyReq();
-        moneyReq.setCurrency(CurrencyEnum.THB.name());
+        moneyReq.setCurrency(CurrencyEnum.VND.name());
         moneyReq.setAmount(amount);
 
         //merchantReq
         MerchantReq merchantReq = new MerchantReq();
         merchantReq.setMerchantId(merchantId);
 
+        ReceiverReq receiverReq = new ReceiverReq();
+        receiverReq.setName(receiverName);
+        receiverReq.setPhone(receiverPhone);
+        receiverReq.setEmail(email);
         //payoutReq
         TradePayoutReq payoutReq = new TradePayoutReq();
         payoutReq.setOrderNo(merchantOrderNo);
@@ -96,7 +113,7 @@ public class PayoutRequestDemo {
         payoutReq.setCallbackUrl("your.notify.url");
         payoutReq.setPaymentMethod(paymentMethod);
         payoutReq.setCashAccount(cashAccount);
-
+        payoutReq.setCashAccountType(cashAccountType);
         //jsonStr by gson
         Gson gson = new Gson();
         String jsonStr = gson.toJson(payoutReq);
